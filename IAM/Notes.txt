@@ -1,0 +1,51 @@
+# aws_iam_policy : Provides an IAM POLICY.
+resource "aws_iam_policy" "policy" {
+  name        = "test_policy"
+  path        = "/"  [Path to where to save a policy]
+  description = "My test policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "ec2:Describe*",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
+}
+----------
+# aws_iam_role : CREATES IAM ROLE. REQUIRES ASSUME ROLE
+resource "aws_iam_role" "EMR_Role" {
+  name = "EMR_Role_Default"
+  assume_role_policy = data.aws_iam_policy_document.EMR_AssumeRole
+}
+
+----------
+# Data Source: aws_iam_policy_document : Generates an IAM policy document in JSON format for use with resources that expect policy documents such as aws_iam_policy
+data "aws_iam_policy_document" "CreatePolicyDoc" {
+statement {}
+}
+
+-----------
+# aws_iam_role : Provides an IAM role.
+resource "aws_iam_role" "test_role" {
+  name = "test_role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      },
+    ]
+  })
+}
+
