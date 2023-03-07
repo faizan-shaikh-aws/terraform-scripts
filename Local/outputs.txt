@@ -1,0 +1,38 @@
+/********** Sensitive info in Output Variable **********/
+
+│ Error: Output refers to sensitive values
+│
+│   on main.tf line 26:
+│   26: output "private_key" {
+│
+│ To reduce the risk of accidentally exporting sensitive data that was intended to be only internal, Terraform requires that any root module output containing sensitive data be explicitly
+│ marked as sensitive, to confirm your intent.
+│
+│ If you do intend to export this data, annotate the output value as sensitive by adding the following argument:
+│     sensitive = true
+
+/********** Liye Cycle Rule **********/
+Before [create_before_destroy]
+local_file.pets: Destroying... [id=1cb5751f9b76ab1498fe42de4281c4034ab52973]
+local_file.pets: Destruction complete after 0s
+local_file.pets: Creating...
+local_file.pets: Creation complete after 0s [id=1cb5751f9b76ab1498fe42de4281c4034ab52973]
+
+After
+local_file.pets: Creating...
+local_file.pets: Creation complete after 0s [id=1cb5751f9b76ab1498fe42de4281c4034ab52973]
+local_file.pets (deposed object 79858e15): Destroying... [id=1cb5751f9b76ab1498fe42de4281c4034ab52973]
+local_file.pets: Destruction complete after 0s
+
+After [prevent_destroy]
+tls_private_key.pvt_key: Refreshing state... [id=8fc8cb3e9e137071456d87fe286b937b620476fa]
+╷
+│ Error: Instance cannot be destroyed
+│
+│   on main.tf line 22:
+│   22: resource "tls_private_key" "pvt_key" {
+│
+│ Resource tls_private_key.pvt_key has lifecycle.prevent_destroy set, but the plan calls for this resource to be destroyed. To avoid this error and continue with the plan, either disable
+│ lifecycle.prevent_destroy or reduce the scope of the plan using the -target flag.
+
+/********** Liye Cycle Rule **********/
