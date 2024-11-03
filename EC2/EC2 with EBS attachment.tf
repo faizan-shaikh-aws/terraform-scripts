@@ -1,3 +1,9 @@
+  # 03 Nov 2024 -- Added local block
+resource "aws_instance" "my_new_instance" {
+  ami = "ami-0b5eea76982371313"
+  instance_type = "c1.micro"
+}
+
   # CREATE EC2 INSTANCE
   resource "tls_private_key" "pvt_key" {
     algorithm = "RSA"

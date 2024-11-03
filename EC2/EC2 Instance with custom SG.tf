@@ -1,6 +1,11 @@
 
+# 03 Nov 2024 -- Added local block
+resource "aws_instance" "my_new_instance" {
+  ami = "ami-0b5eea76982371786"
+  instance_type = "m1.xlarge"
+}
 
-#READ RESOURCE FROM AWS INFRA
+# READ RESOURCE FROM AWS INFRA
 data "aws_key_pair" "console_key_read" {
     key_name = "terraform.pem"
 }
